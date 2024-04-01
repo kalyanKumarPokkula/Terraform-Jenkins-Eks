@@ -1,26 +1,26 @@
 #vpc
 
-module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+# module "vpc" {
+#   source = "terraform-aws-modules/vpc/aws"
 
-  name = "jenkins-vpc"
-  cidr = "10.0.0.0/16"
+#   name = "jenkins-vpc"
+#   cidr = "10.0.0.0/16"
 
-  azs            = data.aws_availability_zones.azs.names
-  public_subnets = var.public_subnets
+#   azs            = data.aws_availability_zones.azs.names
+#   public_subnets = var.public_subnets
 
-  enable_dns_hostnames = true
+#   enable_dns_hostnames = true
 
-  tags = {
-    Name        = "jenkins-vpc"
-    Terraform   = "true"
-    Environment = "dev"
-  }
+#   tags = {
+#     Name        = "jenkins-vpc"
+#     Terraform   = "true"
+#     Environment = "dev"
+#   }
 
-  public_subnet_tags = {
-    Name = "jenkins-subnet"
-  }
-}
+#   public_subnet_tags = {
+#     Name = "jenkins-subnet"
+#   }
+# }
 
 
 #SG
@@ -30,7 +30,7 @@ module "jenkins_sg" {
 
   name        = "jenkins-sg"
   description = "Security group for jenkins servers"
-  vpc_id      = module.vpc.vpc_id
+  # vpc_id      = module.vpc.vpc_id
 
   ingress_with_cidr_blocks = [
     {
@@ -78,10 +78,10 @@ module "ec2_instance" {
   key_name                    = "AWS_LOGIN"
   monitoring                  = true
   vpc_security_group_ids      = [module.jenkins_sg.security_group_id]
-  subnet_id                   = module.vpc.public_subnets[0]
+  # subnet_id                   = module.vpc.public_subnets[0]
   associate_public_ip_address = true
   user_data                   = file("jenkins-install.sh")
-  availability_zone           = data.aws_availability_zones.azs.names[0]
+  # availability_zone           = data.aws_availability_zones.azs.names[0]
 
   tags = {
     Name        = "jenkins-server",
